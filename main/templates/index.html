@@ -1,0 +1,592 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Weather | Weather Dashboard</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <header class="header">
+
+        <div class="logo">
+
+            <img
+                src="{% static 'images/l.jpg' %}"
+                alt="Weather Logo">
+
+            <h1>Weather</h1>
+
+        </div>
+
+
+        <div class="date-display">
+
+            <i class="fas fa-calendar-alt"></i>
+
+            <span id="current-date"></span>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =========================
+         SEARCH
+    ========================== -->
+
+    <section class="search-section">
+
+        <form
+            method="POST"
+            action="{% url 'index' %}">
+
+            {% csrf_token %}
+
+            <div class="search-container">
+
+                <input
+                    type="text"
+                    name="city"
+                    class="search-input"
+                    placeholder="Enter city name..."
+                    autocomplete="off"
+                    required>
+
+
+                <button
+                    type="submit"
+                    class="search-btn">
+
+                    <i class="fas fa-search"></i>
+
+                    Search
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+
+
+    <!-- =========================
+         MAIN WEATHER CARD
+    ========================== -->
+
+    <section class="weather-card">
+
+
+        <!-- LEFT SIDE -->
+
+        <div class="weather-primary">
+
+
+            <!-- Temperature -->
+
+            <div class="temperature">
+
+                {{ temp }}°C
+
+            </div>
+
+
+            <!-- City -->
+
+            <h2 class="city-name">
+
+                {{ city }}
+
+            </h2>
+
+
+            <!-- Weather Condition -->
+
+            <div class="weather-condition">
+
+                <img
+                    src="{% static 'images/light-rain.jpg' %}"
+                    alt="{{ des }}"
+                    class="weather-icon">
+
+                <span>
+
+                    {{ des|title }}
+
+                </span>
+
+            </div>
+
+
+
+            <!-- Weather Details -->
+
+            <div class="weather-details">
+
+
+                <!-- Wind -->
+
+                <div class="detail-item">
+
+                    <i class="fas fa-wind"></i>
+
+                    <div>
+
+                        <div class="detail-value">
+
+                            {{ wind }} m/s
+
+                        </div>
+
+                        <div class="detail-label">
+
+                            Wind Speed
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Humidity -->
+
+                <div class="detail-item">
+
+                    <i class="fas fa-tint"></i>
+
+                    <div>
+
+                        <div class="detail-value">
+
+                            {{ humidity }}%
+
+                        </div>
+
+                        <div class="detail-label">
+
+                            Humidity
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Pressure -->
+
+                <div class="detail-item">
+
+                    <i class="fas fa-compress-alt"></i>
+
+                    <div>
+
+                        <div class="detail-value">
+
+                            {{ pressure }} hPa
+
+                        </div>
+
+                        <div class="detail-label">
+
+                            Pressure
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Visibility -->
+
+                <div class="detail-item">
+
+                    <i class="fas fa-eye"></i>
+
+                    <div>
+
+                        <div class="detail-value">
+
+                            {{ visibility }} km
+
+                        </div>
+
+                        <div class="detail-label">
+
+                            Visibility
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- RIGHT SIDE WEATHER IMAGE -->
+
+        <div class="weather-secondary">
+
+            <img
+                src="https://images.unsplash.com/photo-1580193769210-b8d1c049a7d9?auto=format&fit=crop&w=1174&q=80"
+                alt="Weather illustration">
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         WEATHER STATISTICS
+    ========================== -->
+
+    <section class="stats-section">
+
+
+        <!-- FEELS LIKE -->
+
+        <div class="stat-card">
+
+            <div class="stat-header">
+
+                <i class="fas fa-thermometer-half"></i>
+
+                <h3>
+
+                    Feels Like
+
+                </h3>
+
+            </div>
+
+
+            <div class="stat-value">
+
+                {{ feels_like }}°C
+
+            </div>
+
+
+            <div class="stat-label">
+
+                How it actually feels outside
+
+            </div>
+
+        </div>
+
+
+
+        <!-- MIN MAX -->
+
+        <div class="stat-card">
+
+            <div class="stat-header">
+
+                <i class="fas fa-temperature-high"></i>
+
+                <h3>
+
+                    Min / Max Temp
+
+                </h3>
+
+            </div>
+
+
+            <div class="stat-value">
+
+                {{ temp_min }}°C / {{ temp_max }}°C
+
+            </div>
+
+
+            <div class="stat-label">
+
+                Daily temperature range
+
+            </div>
+
+        </div>
+
+
+
+        <!-- CONDITIONS -->
+
+        <div class="stat-card">
+
+            <div class="stat-header">
+
+                <i class="fas fa-cloud-sun"></i>
+
+                <h3>
+
+                    Conditions
+
+                </h3>
+
+            </div>
+
+
+            <div class="stat-value">
+
+                {{ des|title }}
+
+            </div>
+
+
+            <div class="stat-label">
+
+                Current weather conditions
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         DAILY OVERVIEW
+    ========================== -->
+
+    <section class="forecast-section">
+
+
+        <h2 class="section-header">
+
+            <i class="fas fa-calendar-week"></i>
+
+            Daily Overview
+
+        </h2>
+
+
+
+        <div class="forecast-cards">
+
+
+            <!-- TEMPERATURE -->
+
+            <div class="forecast-card">
+
+                <div class="forecast-day">
+
+                    Temperature
+
+                </div>
+
+
+                <i class="fas fa-thermometer-three-quarters forecast-icon"
+                    style="font-size: 40px;">
+
+                </i>
+
+
+                <div class="forecast-temp">
+
+                    {{ temp }}°C
+
+                </div>
+
+
+                <div class="forecast-desc">
+
+                    Current
+
+                </div>
+
+            </div>
+
+
+
+            <!-- HUMIDITY -->
+
+            <div class="forecast-card">
+
+                <div class="forecast-day">
+
+                    Humidity
+
+                </div>
+
+
+                <i class="fas fa-tint forecast-icon"
+                    style="font-size: 40px;">
+
+                </i>
+
+
+                <div class="forecast-temp">
+
+                    {{ humidity }}%
+
+                </div>
+
+
+                <div class="forecast-desc">
+
+                    Moisture Level
+
+                </div>
+
+            </div>
+
+
+
+            <!-- WIND -->
+
+            <div class="forecast-card">
+
+                <div class="forecast-day">
+
+                    Wind
+
+                </div>
+
+
+                <i class="fas fa-wind forecast-icon"
+                    style="font-size: 40px;">
+
+                </i>
+
+
+                <div class="forecast-temp">
+
+                    {{ wind }} m/s
+
+                </div>
+
+
+                <div class="forecast-desc">
+
+                    Wind Speed
+
+                </div>
+
+            </div>
+
+
+
+            <!-- PRESSURE -->
+
+            <div class="forecast-card">
+
+                <div class="forecast-day">
+
+                    Pressure
+
+                </div>
+
+
+                <i class="fas fa-compress-arrows-alt forecast-icon"
+                    style="font-size: 40px;">
+
+                </i>
+
+
+                <div class="forecast-temp">
+
+                    {{ pressure }} hPa
+
+                </div>
+
+
+                <div class="forecast-desc">
+
+                    Atmospheric
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
+    <footer class="footer">
+
+        <p>
+
+            © 2026 Weather.
+            All rights reserved by mr8848
+
+        </p>
+
+    </footer>
+
+
+</div>
+
+
+
+<!-- =========================
+     DATE SCRIPT
+========================== -->
+
+<script>
+
+    const today = new Date();
+
+    document.getElementById("current-date").textContent =
+        today.toLocaleDateString("en-US", {
+
+            weekday: "long",
+
+            year: "numeric",
+
+            month: "long",
+
+            day: "numeric"
+
+        });
+
+</script>
+
+
+</body>
+
+</html>
